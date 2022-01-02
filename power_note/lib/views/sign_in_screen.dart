@@ -14,6 +14,8 @@ class SignInScreen extends StatefulWidget {
 final _formkey = GlobalKey<FormState>();
 
 class _SignInScreenState extends State<SignInScreen> {
+  final _textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -33,7 +35,7 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
     );
     return GestureDetector(
-      // onTap: () => unfocus(),
+      onTap: () => unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: appBar,
@@ -48,15 +50,19 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 appLogo(context, size),
                 RoundedInputField(
+                  textEditingController: _textController,
                   hintText: 'Email',
                   onChanged: (val) {},
                 ),
                 RoundedInputField(
+                  textEditingController: _textController,
                   hintText: 'Password',
                   onChanged: (val) {},
                 ),
                 forgotPasswordText(context, size),
-                LoginCTAButton(),
+                LoginCTAButton(
+                   onTap: () {},
+                ),
                 signinText(context),
               ],
             ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:power_note/components/app_logo.dart';
+import 'package:power_note/api/backend_service.dart';
 
 import 'package:power_note/components/login_cta_button.dart';
 import 'package:power_note/components/text_input_field.dart';
+import 'package:power_note/models/user_model.dart';
 
 final _formkey = GlobalKey<FormState>();
 
@@ -15,6 +15,40 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final _textController = TextEditingController();
+  final _confirmPassTextEditingController = TextEditingController();
+  String? confirmPassword;
+  User user = new User(
+    uid: '12121212',
+    name: '',
+    email: '',
+    password: '',
+  );
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  // String? get _errorText {
+  //   // at any time, we can get the text from _controller.value.text
+  //   final text = _textController.value.text;
+  //   final confirmPasstext = _confirmPassTextEditingController.value.text;
+  //   // Note: you can do your own custom validation here
+  //   // Move this logic this outside the widget for more testable code
+  //   if (text.isEmpty) {
+  //     return 'Can\'t be empty';
+  //   }
+  //   if (text.length < 4) {
+  //     return 'Too short';
+  //   }
+  //   if (text != confirmPasstext) {
+  //     return 'Too short';
+  //   }
+  //   // return null if the text is valid
+  //   return null;
+  // }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -34,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
     return GestureDetector(
-      // onTap: () => unfocus(),
+      onTap: () => unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: appBar,
@@ -53,23 +87,55 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: size.height * 0.1,
                 ),
                 RoundedInputField(
+                  textEditingController: _textController,
                   hintText: 'Name',
-                  onChanged: (val) {},
+                  onChanged: (val) {
+                    setState(() {
+                      user.name = val;
+                    });
+                  },
                 ),
                 RoundedInputField(
+                  textEditingController: _textController,
                   hintText: 'Email',
-                  onChanged: (val) {},
+                  onChanged: (val) {
+                    setState(() {
+                      user.email = val;
+                    });
+                  },
                 ),
                 RoundedInputField(
+                  textEditingController: _textController,
                   hintText: 'Password',
-                  onChanged: (val) {},
+                  onChanged: (val) {
+                    setState(() {
+                      user.password = val;
+                    });
+                  },
                 ),
                 RoundedInputField(
+                  textEditingController: _textController,
                   hintText: 'Confirm Password',
-                  onChanged: (val) {},
+                  // errorText: _errorText,
+                  onChanged: (val) {
+                    setState(() {
+                      confirmPassword = val;
+                    });
+                  },
+                  validator: (val) {
+                    if (confirmPassword == user.password)
+                      return null;
+                    else
+                      return 'Password doesn\'t match';
+                  },
                 ),
                 LoginCTAButton(
                   text: 'Sign up',
+                  onTap: () async {
+                    // print(user);
+                    await DBService().addUserToDB(user);
+                    // print(response);
+                  },
                 ),
                 signinText(context, size),
               ],

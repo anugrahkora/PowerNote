@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class RoundedInputField extends StatefulWidget {
+  final TextEditingController textEditingController;
   final String hintText;
   final ValueChanged<String>? onChanged;
   final Color? color;
   final bool boolean;
-  final String Function(String?)? validator;
+  final String? Function(String?)? validator;
   final textInputType;
   final Icon? prefixIcon;
+  final String? errorText;
   final IconButton? suffixIcon;
   RoundedInputField({
     Key? key,
@@ -19,6 +21,8 @@ class RoundedInputField extends StatefulWidget {
     this.textInputType = TextInputType.text,
     this.prefixIcon,
     this.suffixIcon,
+    required this.textEditingController,
+    this.errorText,
   }) : super(key: key);
 
   @override
@@ -51,6 +55,17 @@ class _RoundedInputFieldState extends State<RoundedInputField> {
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                   color: Theme.of(context).highlightColor, width: 2.0),
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            errorText: widget.errorText,
+            errorBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).errorColor, width: 2.0),
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).errorColor, width: 2.0),
               borderRadius: BorderRadius.circular(25.0),
             ),
             focusedBorder: OutlineInputBorder(
